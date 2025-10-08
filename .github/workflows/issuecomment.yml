@@ -1,30 +1,23 @@
 name: Learning GitHub Script
-
 on:
   issues:
     types: [opened]
-
 jobs:
   comment:
     runs-on: ubuntu-latest
-    env:
-      COLUMN_ID: 12345678  # replace with your actual GitHub project column ID
     steps:
-      - uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            // Post a comment on the new issue
-            await github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: "🎉 You've created this issue comment using GitHub Script!!!"
+    - uses: actions/github-script@0.8.0
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+            github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: "🎉 You've created this issue comment using GitHub Script!!!"
             })
-
-            // Add the issue to the project column
-            await github.rest.projects.createCard({
-              column_id: parseInt(process.env.COLUMN_ID),
-              content_id: context.payload.issue.id,
-              content_type: "Issue"
-            })
+            github.projects.createCard({
+            column_id: 1234557,
+            content_id: context.payload.issue.id,
+            content_type: "Issue"
+            });
